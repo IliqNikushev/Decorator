@@ -1,7 +1,5 @@
 # Facade
-A C# Library that introduces dynamic [Facade Pattern](https://en.wikipedia.org/wiki/Facade_pattern) definitions. 
-
-Implemented in [.Net3.5/](.Net3.5/) which is compatible for Unity3D.
+A C# Library that introduces dynamic [Facade Pattern](https://en.wikipedia.org/wiki/Facade_pattern) definitions.  
 
 ### Exposes
 ```
@@ -18,7 +16,39 @@ using Component as the SubSystem
 - Introduce generic encapsulation of components
 - Allow Dynamic extention of classes
 
+### Usage
+```
+using Facade;
+class Human: Model<Human>{}
+class Location : Component<Human>
+{
+    public float X{get; private set;}
+    public float Y{get; private set;}
+
+    public void MoveTo(float x, float y)
+    {
+        this.X = x;
+        this.Y = y;
+    }
+}
+
+// Prorgram.cs
+void Main()
+{
+    Human human = new Human();
+    Location location = human.GetComponent<Location>()
+
+    location.MoveTo(1, 1);
+    Console.WriteLine("{0}x{1}", location.X, location.Y)
+}
+```
+### Serialization
+Each **Model** can define its own `OnSerialization`, `OnDeserialization`  
+Each **Component** can define its own `OnSerialization`, `OnDeserialization`  
+**Default** implementation assignes and writes all **Fields**
+
 ### About
+
 This library extends the [Facade Pattern](https://en.wikipedia.org/wiki/Facade_pattern) and introduces dynamic definitions.
 The implementation is similar to how it is done in Unity3D using Components.
 
