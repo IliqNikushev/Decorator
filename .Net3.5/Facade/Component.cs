@@ -8,29 +8,34 @@ namespace Facade
     {
         public Component() { }
         public Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        internal abstract void AssignModel(object model);
 
-        protected virtual void Init() { }
-
-        public static implicit operator bool(Component component)
-        {
-            return component == null;
-        }
+        protected virtual void AfterModelAssigned() { }
     }
 
     [System.Serializable]
     public abstract class Component<T> : Component where T : Model<T>
     {
         private bool isInstance { get { return Model != null; } }
+        [NonSerialized]
         protected internal T Model;
+
+        internal override void AssignModel(object model)
+        {
+            if (!(model is T))
+                throw new InvalidOperationException("Cannot assign model specified to component");
+
+            this.Model = model as T;
+            this.AfterModelAssigned();
+        }
 
         public Component() { }
         public Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        protected internal Component<T> CreateInstance(T Model)
+        protected internal Component<T> CreateCloneFor(T model)
         {
             var instance = System.Activator.CreateInstance(this.GetType()) as Component<T>;
-            instance.Model = Model;
-            instance.Init();
+            instance.AssignModel(model);
 
             return instance;
         }

@@ -4,52 +4,52 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Facade.Test
 {
     [TestClass]
-    public class Model
+    public class SerializationModel : SerializationTestBase
     {
         [TestMethod]
-        public void CanChangeDefaultComponentValues()
+        public void CanSerializeWithInnerClasses()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void CanNotChangeDefaultComponentValuesAfterInstantiated()
+        public void CanSerializeWithInnerComponents()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void ExposesComponents()
+        public void CanSerializeWithInnerClassesWithComponents()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void CallsOnDeserializationOfComponentTypeResolveEvent()
+        public void CanSerializeWithInnerComponentsWithClasses()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void CallsOnDeserializationOfComponentNotFoundEvent()
+        public void CanSerializeWithInnerComponentsWithModels()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void LoadsAllComponentsFromAssembliesOnStaticInitialization()
+        public void CanSerializeWithInnerModels()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void AttachesTypeResolveWhenAssemblyIsLoaded()
+        public void CanSerialize()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void InstancesHaveComponentsAfterStaticInitialization()
+        public void CanSerializeWhenMissingDLL()
         {
             throw new NotImplementedException();
         }

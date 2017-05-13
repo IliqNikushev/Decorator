@@ -7,7 +7,25 @@ namespace Facade.Test
     public class Component
     {
         [TestMethod]
-        public void TestMethod1()
+        public void CanExposeMembers()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanCreateInstanceFromOther()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanWorkWithoutModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void HasModelWhenCreatedByClone()
         {
             throw new NotImplementedException();
         }

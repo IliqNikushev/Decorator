@@ -19,7 +19,6 @@ namespace Facade
 
         static protected internal Dictionary<System.Type, List<object>> classComponents = new Dictionary<System.Type, List<object>>();
         static protected internal Dictionary<System.Type, int> instances = new Dictionary<System.Type, int>();
-
         private static HashSet<string> loadedAssemblies = new HashSet<string>();
 
         static Model()
@@ -28,13 +27,21 @@ namespace Facade
                 LoadComponentsFromAssembly(item);
         }
 
-        public Model() { }
+        public Model() { LoadComponents(); }
         public Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public static void LoadComponentsFromAssembly(System.Reflection.Assembly item)
         {
             if (loadedAssemblies.Contains(item.FullName))
                 return;
+
+            System.AppDomain.CurrentDomain.TypeResolve += (x, y) =>
+            {
+                if (item.GetType(y.Name, false) != null)
+                    return item;
+
+                return null;
+            };
 
             loadedAssemblies.Add(item.FullName);
             try
@@ -82,12 +89,13 @@ namespace Facade
             info.AddValue("ComponentTypes", componentTypes); 
 
             foreach (var component in this.Components)
-                info.AddValue(this.GetType().FullName + "." + component.GetType().FullName, component);
+                info.AddValue(this.GetType().FullName + "." + component.GetType().FullName, (object)component);
         }
 
         protected override void OnDeserialization(SerializationInfo info, StreamingContext context)
         {
             base.OnDeserialization(info, context);
+            LoadComponents();
 
             string[] componentTypes = info.GetValue("ComponentTypes", typeof(string[])) as string[];
 
@@ -114,6 +122,7 @@ namespace Facade
                     if (this.components[i].GetType() == found)
                     {
                         this.components[i] = component as Facade.Component;
+                        this.components[i].AssignModel(this);
                         component = 0;
                         break;
                     }
@@ -127,19 +136,18 @@ namespace Facade
                 OnComponentNotFoundDuringDeserialization(found);
             }
         }
+
+        internal abstract void LoadComponents();
     }
 
     [System.Serializable]
     public abstract class Model<T> : Model where T : Model<T>
     {
-        [NonSerialized]
-        private Dictionary<System.Type, Component<T>> genericComponents = new Dictionary<System.Type, Component<T>>();
-
         public new Component<T>[] Components
         {
             get
             {
-                return genericComponents.Values.ToArray();
+                return base.Components.Where(x => x is Component<T>).Select(x => x as Component<T>).ToArray();
             }
         }
 
@@ -150,12 +158,10 @@ namespace Facade
         {
             T instance = Activator.CreateInstance(typeof(T), null) as T;
 
-            instance.LoadComponents();
-
             return instance;
         }
 
-        private void LoadComponents()
+        internal override void LoadComponents()
         {
             var type = this.GetType();
 
@@ -169,8 +175,7 @@ namespace Facade
                 {
                     foreach (var item in classComponents[type])
                     {
-                        Component<T> instance = (item as Component<T>).CreateInstance((T)this);
-                        this.genericComponents.Add(item.GetType(), instance);
+                        Component<T> instance = (item as Component<T>).CreateCloneFor((T)this);
                         components.Add(instance as Component);
                     }
                 }
@@ -181,10 +186,7 @@ namespace Facade
 
         public D GetComponent<D>() where D : Component<T>
         {
-            if (this.genericComponents.ContainsKey(typeof(D)))
-                return (D)this.genericComponents[typeof(D)];
-
-            return null;
+            return this.Components.FirstOrDefault(x => x is D) as D;
         }
 
         public static D ClassComponents<D>() where D : Component<T>

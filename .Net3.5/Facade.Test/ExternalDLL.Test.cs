@@ -7,7 +7,25 @@ namespace Facade.Test
     public class ExternalDLL
     {
         [TestMethod]
-        public void TestMethod1()
+        public void CanRecogniseExternalModels()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanRecogniseExternalComponents()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanResolveExternalDLLTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanLinkComponentsToModels()
         {
             throw new NotImplementedException();
         }
