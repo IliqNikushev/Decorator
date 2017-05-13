@@ -10,9 +10,12 @@ namespace Facade
     [System.Serializable]
     public abstract class Model : Serializable   
     {
+        public static event Action<string> OnComponentTypeNotFoundDuringDeserialization = (x) => { };
+        public static event Action<System.Type> OnComponentNotFoundDuringDeserialization = (x) => { };
+
         [NonSerialized]
         internal List<Component> components = new List<Component>();
-        public Component[] GetComponents { get { return components.ToArray(); } }
+        public Component[] Components { get { return components.ToArray(); } }
 
         static protected internal Dictionary<System.Type, List<object>> classComponents = new Dictionary<System.Type, List<object>>();
         static protected internal Dictionary<System.Type, int> instances = new Dictionary<System.Type, int>();
@@ -25,8 +28,8 @@ namespace Facade
                 LoadComponentsFromAssembly(item);
         }
 
-        internal Model() { }
-        protected Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public Model() { }
+        public Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public static void LoadComponentsFromAssembly(System.Reflection.Assembly item)
         {
@@ -68,7 +71,61 @@ namespace Facade
 
         public Component GetComponent(System.Type type)
         {
-            return GetComponents.FirstOrDefault(x => x.GetType() == type);
+            return Components.FirstOrDefault(x => x.GetType() == type);
+        }
+
+        protected override void OnSerialization(SerializationInfo info, StreamingContext context)
+        {
+            base.OnSerialization(info, context);
+
+            string[] componentTypes = this.Components.Select(x => x.GetType().FullName).ToArray();
+            info.AddValue("ComponentTypes", componentTypes); 
+
+            foreach (var component in this.Components)
+                info.AddValue(this.GetType().FullName + "." + component.GetType().FullName, component);
+        }
+
+        protected override void OnDeserialization(SerializationInfo info, StreamingContext context)
+        {
+            base.OnDeserialization(info, context);
+
+            string[] componentTypes = info.GetValue("ComponentTypes", typeof(string[])) as string[];
+
+            foreach (var type in componentTypes)
+            {
+                // find registered
+
+                System.Type found = System.Type.GetType(type);
+                if (found == null)
+                {
+                    OnComponentTypeNotFoundDuringDeserialization(type);
+                    try
+                    {
+                        object o = info.GetValue(this.GetType().FullName + "." + type, typeof(Exception));
+                    }
+                    catch { }
+                    continue;
+                }
+
+                object component = info.GetValue(this.GetType().FullName + "." + type, found);
+
+                for (int i = 0; i < this.components.Count; i++)
+                {
+                    if (this.components[i].GetType() == found)
+                    {
+                        this.components[i] = component as Facade.Component;
+                        component = 0;
+                        break;
+                    }
+                }
+
+                if (component is int)
+                {
+                    continue;
+                }
+
+                OnComponentNotFoundDuringDeserialization(found);
+            }
         }
     }
 
@@ -78,7 +135,7 @@ namespace Facade
         [NonSerialized]
         private Dictionary<System.Type, Component<T>> genericComponents = new Dictionary<System.Type, Component<T>>();
 
-        protected Component<T>[] Components
+        public new Component<T>[] Components
         {
             get
             {
@@ -86,13 +143,12 @@ namespace Facade
             }
         }
 
-        internal Model() { }
-        public Model(params object[] args) { }
-        protected Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public Model() { }
+        public Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public static T CreateInstance(params object[] args)
+        public static T CreateInstance()
         {
-            T instance = Activator.CreateInstance(typeof(T), args) as T;
+            T instance = Activator.CreateInstance(typeof(T), null) as T;
 
             instance.LoadComponents();
 

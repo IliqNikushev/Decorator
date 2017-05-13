@@ -52,10 +52,10 @@ Each **Component** can define its own `OnSerialization`, `OnDeserialization`
 This library extends the [Facade Pattern](https://en.wikipedia.org/wiki/Facade_pattern) and introduces dynamic definitions.
 The implementation is similar to how it is done in Unity3D using Components.
 
-During my development flow I strive to reuse my code.  
-The facade pattern has been quite useful in splitting up certain functional parts.  
+During my development flow I strive to split my code.  
+The facade pattern has been quite useful in separating functional parts.  
 I have seen that most classes tend to become big and thus resulting in thousands of methods under one class.  
-I implemented this dynamic facade pattern so that my development flow can be split across DLL's which can later be versioned independently.  
+I implemented this dynamic facade pattern so that the development flow can be split across DLL's which can later be versioned independently.  
 
 - Allows for dynamic extention of classes  
 - Prevents the necessity of having 1 large DLL  

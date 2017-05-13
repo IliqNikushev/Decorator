@@ -6,8 +6,8 @@ namespace Facade
     [System.Serializable]
     public abstract class Component : Serializable
     {
-        internal Component() { }
-        protected Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public Component() { }
+        public Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         protected virtual void Init() { }
 
@@ -23,9 +23,8 @@ namespace Facade
         private bool isInstance { get { return Model != null; } }
         protected internal T Model;
 
-        internal Component() { }
-        protected Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
-        public Component(params object[] args) { }
+        public Component() { }
+        public Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         protected internal Component<T> CreateInstance(T Model)
         {

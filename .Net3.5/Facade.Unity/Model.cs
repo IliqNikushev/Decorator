@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using UnityEngine;
 
 namespace Facade.Unity
 {
-    public abstract class Model<T> : global::Facade.Model<T> where T : global::Facade.Model<T>
+    [System.Serializable]
+    public abstract class Model<T> : global::Facade.Model<T> where T : Model<T>
     {
-        [NonSerialized]
-        private GameObject gameObject;
-        public GameObject GameObject { get { return gameObject; } }
+        public new Component<T>[] Components { get { return base.Components.Cast<Component<T>>().ToArray(); } }
 
-        public Model(GameObject gameObject = null)
-        {
-            this.gameObject = gameObject;
-        }
+        public Model() { }
+        public Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        [NonSerialized]
+        public GameObject GameObject;
     }
 }

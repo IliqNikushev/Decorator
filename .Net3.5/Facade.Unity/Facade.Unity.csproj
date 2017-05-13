@@ -7,8 +7,8 @@
     <ProjectGuid>{3DBEC522-9B85-4598-97AE-73263880FE17}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DIS.Decorator.Unity</RootNamespace>
-    <AssemblyName>DIS.Decorator.Unity</AssemblyName>
+    <RootNamespace>Facade.Unity</RootNamespace>
+    <AssemblyName>Facade.Unity</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,7 +58,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>dll "$(TargetDir)" "$(TargetName)"</PostBuildEvent>
+    <PostBuildEvent>::dll "$(TargetDir)" "$(TargetName)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

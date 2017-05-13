@@ -47,35 +47,18 @@
     <Compile Include="Component.cs" />
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="SerializableField.cs" />
     <Compile Include="Serializable.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extentions\Type.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Debug\Debug.csproj">
-      <Project>{3bacae2a-a39b-4862-b03d-a9c88849eb30}</Project>
-      <Name>Debug</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DIS.Core.Manager.DLL\DIS.Core.Manager.DLL.csproj">
-      <Project>{591e004c-fd30-4b76-880b-62bddd7986eb}</Project>
-      <Name>DIS.Core.Manager.DLL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Promise\.Net3.5\Promise\Promise.csproj">
-      <Project>{e850b3e8-1402-4500-bd71-9b761152bbbd}</Project>
-      <Name>Promise</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DIS.Utils.Generic\DIS.Utils.Generic.csproj">
-      <Project>{e1165d4f-4d6c-4b5b-9027-9059352728c3}</Project>
-      <Name>DIS.Utils.Generic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>dll "$(TargetDir)" "$(TargetName)"</PostBuildEvent>
+    <PostBuildEvent>::dll "$(TargetDir)" "$(TargetName)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,16 +5,13 @@ Allows for definition of behaviours of Models and Facades.
 ### Exposes
 ```
 namespace Facade.Unity:
-    Model<T>
+    Model<T> extends Facade.Model<T>
+    Component<T> where T: Model<T>
     ModelBehaviour<T> where T: Model<T>
 ```
 
 ### About
-
-Example using a human that can age:
-See {} // todo  
-
-File structure  
+Implements a basic extention of the Facade library that exposes Components to be exposed.
 
 - Assets/Scripts
   - Human/ 
