@@ -151,7 +151,7 @@ namespace Facade
             }
         }
 
-        public Model() { }
+        public Model() { if (!this.GetType().IsSerializable) throw new Exception("Class is not serializable.:" + this.GetType().FullNormalName()); }
         public Model(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public static T CreateInstance()
