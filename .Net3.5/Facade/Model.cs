@@ -189,7 +189,7 @@ namespace Facade
             return this.Components.FirstOrDefault(x => x is D) as D;
         }
 
-        public static D ClassComponents<D>() where D : Component<T>
+        public static D GetClassComponent<D>() where D : Component<T>
         {
             var type = typeof(T);
             if (classComponents.ContainsKey(type))

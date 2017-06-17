@@ -9,8 +9,6 @@ namespace Facade
         public Component() { }
         public Component(SerializationInfo info, StreamingContext context) : base(info, context) { }
         internal abstract void AssignModel(object model);
-
-        protected virtual void AfterModelAssigned() { }
     }
 
     [System.Serializable]
@@ -20,13 +18,17 @@ namespace Facade
         [NonSerialized]
         protected internal T Model;
 
+        public void AssignModel(T model)
+        {
+            AssignModel(model as object);
+        }
+
         internal override void AssignModel(object model)
         {
             if (!(model is T))
                 throw new InvalidOperationException("Cannot assign model specified to component");
 
             this.Model = model as T;
-            this.AfterModelAssigned();
         }
 
         public Component() { }
