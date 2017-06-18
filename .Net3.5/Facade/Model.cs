@@ -23,6 +23,7 @@ namespace Facade
 
         static Model()
         {
+            Log.Info("Facade init");
             foreach (var item in System.AppDomain.CurrentDomain.GetAssemblies())
                 LoadComponentsFromAssembly(item);
         }
@@ -32,6 +33,7 @@ namespace Facade
 
         public static void LoadComponentsFromAssembly(System.Reflection.Assembly item)
         {
+            Log.Info("Loading " + item.FullName);
             if (loadedAssemblies.Contains(item.FullName))
                 return;
 
@@ -196,7 +198,7 @@ namespace Facade
             {
                 if (instances.ContainsKey(type))
                 {
-                    throw new Exception("Decoration can happen before an instane is made, " + typeof(T).FullNormalName() + ">" + typeof(D).FullNormalName());
+                    throw new Exception("Adding components can happen before an instane is made, " + typeof(T).FullNormalName() + ">" + typeof(D).FullNormalName());
                 }
                 else
                 {

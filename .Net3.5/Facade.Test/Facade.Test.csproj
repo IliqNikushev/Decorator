@@ -55,17 +55,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Character\Components\Stats.cs" />
-    <Compile Include="CharacterExample.Test.cs" />
     <Compile Include="ExternalDLL.Test.cs" />
     <Compile Include="SerializationTestBase.cs" />
     <Compile Include="SerializationModel.Test.cs" />
     <Compile Include="SerializationComponent.Test.cs" />
     <Compile Include="Serialization.Test.cs" />
-    <Compile Include="Character\Components\Location.cs" />
     <Compile Include="Component.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Character\Human.cs" />
     <Compile Include="Model.Test.cs" />
   </ItemGroup>
   <ItemGroup>

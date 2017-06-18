@@ -250,3 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+Plugins
+Library
+/.Net3.5/Example/Unity/Facade/ProjectSettings
+Temp
